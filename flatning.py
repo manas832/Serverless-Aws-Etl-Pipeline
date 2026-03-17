@@ -21,10 +21,10 @@ print("----------------------------------DF4---------------------------")
 df4.printSchema();
 df4.show(truncate=False)
 
-# df4.write.mode("overwrite").parquet("s3a://serverless-etl-project-manas/raw")
+df4.write.mode("overwrite").parquet("s3a://serverless-etl-project-manas/raw")
 
-df1 = spark.read.parquet("s3a://serverless-etl-project-manas/raw");
-df1.show(truncate=False)
+# df1 = spark.read.parquet("s3a://serverless-etl-project-manas/raw");
+# df1.show(truncate=False)
 
 print("-------------------------------------version 1.2 completed-----------------------------")
 

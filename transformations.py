@@ -1,6 +1,24 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col 
+import sys
+import os
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
 
+#----------------------------------------------AWS Glue Job Parameters--------------------------------------
+args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+
+
+
+#----------------------------------------------------------------
 spark = SparkSession.builder \
     .appName("transformations") \
     .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
@@ -23,4 +41,8 @@ products_df = df1.select('product.product_id', col('product.name').alias('produc
 products_df.show()
 products_df.write.parquet("s3a://serverless-etl-project-manas/processed/products_df", mode="overwrite");
 
+
+job.commit()
+
 spark.stop();
+
